@@ -1,26 +1,46 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import PeopleList from "./PeopleList";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const people = [
+  { id: 1, name: "Claudio", status: "Processar" },
+  { id: 2, name: "Diovana", status: "Processar" }
+];
+class App extends React.Component {
+  state = {
+    people: people,
+    selectedPerson: null
+  };
+
+  onPersonSelected = person => {
+    console.log(person);
+    person.status = "PROCESSANDO";
+    this.setState({ selectedPerson: person }, () => {
+      console.log(this.state.selectedPerson);
+      setTimeout(() => {
+        this.onProcess(this.state.selectedPerson);
+      }, 2000);
+    });
+  };
+
+  onProcess = person => {
+    person.status = "DONE";
+    setTimeout(() => {
+      this.setState({ selectedPerson: person }, () => {
+        console.log(this.state.selectedPerson);
+      });
+    }, 3000);
+  };
+
+  render() {
+    return (
+      <div>
+        <PeopleList
+          people={this.state.people}
+          onPersonSelected={this.onPersonSelected}
+        />
+      </div>
+    );
+  }
 }
 
 export default App;
